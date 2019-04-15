@@ -1,0 +1,16 @@
+{
+  "name": "03_weatherapp",
+  "version": "1.0.0",
+  "description": "NodeJS Weather Application",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Vijay",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.13.1",
+    "request": "^2.88.0",
+    "yargs": "^4.8.1"
+  }
+}

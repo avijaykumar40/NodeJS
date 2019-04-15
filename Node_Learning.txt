@@ -1,0 +1,702 @@
+1. SETUP
+========
+   - Install node and check if installed sucessfully using node --version in command prompt
+   - Node is server side javascript similar to php, java etc
+   
+   What is Node
+   ============
+   - Node and Javascript executing in the browser run on same engine Chrome's V8 Javascript engine.
+   - V8 runtime engine takes javascript code and complies into much faster machine code.
+   - V8 engine is written in C++
+   
+		Difference between Javascript V8 and Node V8
+		============================================
+		- In JS we have window object to manipluate the content of browser window which have propeties and functions 
+		- In Node we have global which contains all the propeties and functions similar to windows but with some exceptions 
+		- In Browser we also have access to document which has provides functions to change the DOM look 
+		- We dont have HTML documnet in Node but we have process similar to it
+		- Window ====> global
+		- Documnet =====> process
+		- process.exit(0) - this will exit from node session and return back to cmd
+		- We can do the same by pressing Ctrl C twice
+		
+	Why Should I use Node?
+	======================
+		- Node uses event-driven, non-blocking I/O model that makes it lightweight and efficient.
+		 - I/O : Reading and writing to DB / File / HTTP request to external and I/O takes time.
+		 - Single Thred
+		 - Non blocking I/O is great when one user invoking API other user can and make DB calls or any other action.
+		 - In non blocking we have call back function which will execute after the events are executed.
+		 - In Non blocking it doesnot wait for the I/O operation.
+		 - In Non blocking the time consumed is near aboutn 50%
+		 - In Blocking for each new request on web server a request thread is created to execute
+		 - In Non blocking its single thread as I/) doesnot wait till completiong
+		 - Blocking and Non Blocking :  
+		 
+		 Blocking Eg.
+		 ============
+		 var getUserSync = require('./getUserSync')
+		 
+		 console.log('Starting User1')
+		 var user1 = getUserSync('123');  // 0 to 3 sec
+		 console.log('user1',user1) // .2 sec --> 3.2 sec
+		 
+		 console.log('Starting User2')
+		 var user2 = getUserSync('123'); //3.2 sec to 6.2 Sec
+		 console.log('user2',user2)	 // .2 sec --> 6.4 sec
+
+		 var sum = 1 + 2;
+		 console.log('The sum is ' + sum) // 6.4 to 6.6 sec
+		 
+		 OutPut
+		 ======
+		 Starting User1
+		 Print User object 1
+		 Starting User2
+		 Print User Object 2
+		 The sum is 3
+			
+		 
+		 Non Blocking E.g
+		 =================
+		 var getUser = require('./getUser')
+		 
+		 console.log('Starting User1')
+		 getUser('123', function(user1){  //.2 sec to start the event
+			console.log('user1',user1) // After the response is recevied the call back function will get execute 0 to 3 wait to get response and it will print at 3.2 sec
+		 });
+		 
+		 console.log('Starting User2')
+		 getUser('321', function(user2){ // .2 to .4 sec to start the evnt
+			console.log('user2',user2) // It waited from .2 to get the response from DB and execute this at 3.4 sec i.e 3.2 to 3.4
+		 });
+
+		 var sum = 1 + 2;
+		 console.log('The sum is ' + sum) // .4 to .6 to execute this
+		 
+		 OutPut
+		 ======
+		 Starting User1
+		 Starting User2
+		 The sum is 3
+		 Print User object 1
+		 Print User Object 2
+		 
+		
+		
+		- Node's package ecosystem, npm is the largest ecosystem of open source libraries in the world.
+		- People developing package that solve common problems like valadating objects, creating server or serving content using sockets, there are libraries built for all of those so we dont have to worry about it and focus on specific business logic
+		- Refer : https://www.npmjs.com/
+		
+	Hello World 
+	===========
+		- console.log('Hello World') --> Save as app.js --> execute node app.js
+		
+		Refer code : Node_Practice\01_HelloWorld\app.js
+		
+2. NodeJS Fundamentels (Building NoteApp)
+=========================================
+	- Using Require
+	===============
+		- Modules : Are units of functionality. Which other users and take advantage of building applications.
+		- we can use other modules in our application using function called REQUIRE(require) 
+		- It will allow us to load an module that come bundled with nodeJS like http module which lets us make web server and the fs module which lets us to intract with file system of machine.
+		- It will also all to load external modules like express and sql
+		- It will be usefull to load our own files, which are seprated to modulerize the code.
+		
+		Inbuilt Modules Refernce : https://nodejs.org/api/
+		
+		- We will start with loading the File System and OS inbuilt modules.
+		- fs module to append data to file
+		- os module to get the name of user logged in, etc
+		
+		- template string `` is new feature of ES6
+		e.g console.log(`Hello ${user.username}`) // Where user is the object having property username
+	    
+		Refer code : Node_Practice\02_NotesNodeApp\app.js
+	
+	- Requiring your own files
+	==========================
+		- to use the properties from other file in our file we need to use exports property from module
+		- module.exports.property , property could be any variable or function
+		- Properties from notes.js are exported to app.js
+		
+		Refer code  : Node_Practice\02_NotesNodeApp\app.js
+		              Node_Practice\02_NotesNodeApp\notes.js
+					  
+
+	- Using Modules installed from NPM
+	==================================
+		- NPM is a repository which have very common problems that are developed and packaged by developers, these packages are tested and used by other.
+		- First we need run a command from terminal to tell our application that we want to use npm modules
+		- we can start with 
+			- npm init : Promot you with some question with npm project
+			
+		C:\VJ-Data\Learning\BlockChain\NODE.JS\The Complete Node.js Developer Course (2nd Edition)\Node_Practice\02_NotesNodeApp>npm init
+		This utility will walk you through creating a package.json file.
+		It only covers the most common items, and tries to guess sensible defaults.
+		
+		See `npm help json` for definitive documentation on these fields
+		and exactly what they do.
+		
+		Use `npm install <pkg>` afterwards to install a package and
+		save it as a dependency in the package.json file.
+		
+		Press ^C at any time to quit.
+		package name: (02_notesnodeapp)
+		version: (1.0.0)
+		description:
+		entry point: (app.js)
+		test command:
+		git repository:
+		keywords:
+		author: Vijay Kumar A
+		license: (ISC)
+		About to write to C:\VJ-Data\Learning\BlockChain\NODE.JS\The Complete Node.js Developer Course (2nd Edition)\Node_Practice\02_NotesNodeApp\package.json:
+		
+		{
+		"name": "02_notesnodeapp",
+		"version": "1.0.0",
+		"description": "",
+		"main": "app.js",
+		"scripts": {
+			"test": "echo \"Error: no test specified\" && exit 1"
+		},
+		"author": "Vijay Kumar A",
+		"license": "ISC"
+		}
+		
+		
+		Is this OK? (yes)
+		
+		C:\VJ-Data\Learning\BlockChain\NODE.JS\The Complete Node.js Developer Course (2nd Edition)\Node_Practice\02_NotesNodeApp>
+			
+		- package.json file describes the application and this is where we specific the npm modules.
+		- Lets install the lodash module from npm repository
+		  - > npm install lodash --save // --save will update the package.json file
+		- Once installed we will see node_modules folder in which we will have the insallation in folder lodash
+		- Package.json file will be updated with dependencies of the lodash module.
+		  
+		  "dependencies": {
+				"lodash": "^4.17.11"
+		  }
+		- Now we can use require function to use this module in our application
+		- node will first look for core module with the same name, then it will look into the node_modules folder 
+		- When we share the code no need to copy the node_modules folder as we have already specified the module dependencies in the package.json
+		- we can just use npm install when run without any module name to get all the dependent modules
+		- npm install : will check the package.json file and grabe all the dependencies from the npm repository
+		- When using git just ignore the node modules folder
+		
+	- Restarting App with Nodemon
+	============================
+		- nodemon is a tool that helps develop node.js based applications by automatically restarting the node application when file changes in the directory are detected.
+		- nodemon does not require any additional changes to your code or method of development. nodemon is a replacement wrapper for node, to use nodemon replace the word node on the command line when executing your script.
+		
+		installing nodemon
+		==================
+			npm install nodemon -g // g for global, it will added as global utlity
+			
+		https://www.npmjs.com/package/nodemon
+		
+		
+			
+	- Getting Input From User
+	=========================
+		- User will be able to provide info about title of note to get, add etc.
+		- node appV1.js remove --title="Buy Bread"
+		Using Process :  [ 'C:\\Program Files\\nodejs\\node.exe',
+			'C:\\VJ-Data\\Learning\\BlockChain\\NODE.JS\\The Complete Node.js Developer Course (2nd Edition)\\Node_Practice\\02_NotesNodeApp\\appV1.js',
+			'add',
+			'--title=Buy Bread' ]
+  
+		- passing arguments 
+		  : remove its command 
+		  : --title="Buy Bread" its note title 
+		  In Windows system it will not execute if we use single quote
+		- Using the third arg is difficult as its difficult to parse '--title=Buy Bread' and reterive the value.
+		- we will use yargs third party module to read the command line arguments
+	
+	- Simplified Input using Yargs
+	==============================
+		- Yargs third party module 
+		- we need to install the module and use in our application
+		- https://github.com/yargs/yargs
+		- >npm install yargs@13.2.2 --save
+		- Using Yargs :  { _: [ 'add' ], title: 'Buy Bread', '$0': 'appV1.js' }
+		
+		Refer : Node_Practice\\02_NotesNodeApp\\appV1.js
+				Node_Practice\\02_NotesNodeApp\\nodeV1.js
+				
+	- Working with JSON
+	====================
+		- JSON is a string 
+		- JSON will have attribute name wrapped inside double quotes
+		- var originalNoteString = JSON.stringify(orginalNote) // orginalNote is a object
+		- var note = JSON.parse(noteString) // noteString is a string
+		
+	- Adding and Saving notes
+	==========================
+		var addNote = (title, body) => {
+			var notes = []
+			var note = {
+				title,
+				body,
+			}
+		
+			try{
+				var notesString = fs.readFileSync('notes-data.json')
+				notes = JSON.parse(notesString)
+		
+			}catch(e){
+		
+			}
+			var duplicateNotes = notes.filter((note) => note.title === title)
+			
+			if (duplicateNotes.length === 0) {
+				notes.push(note)
+				fs.writeFileSync('notes-data.json', JSON.stringify(notes))		
+			}
+		}
+		
+	- Refactoring For Reusability
+	=============================
+		- Refactoring the code so make the commonly used function to be implemented 
+		
+		var fetchNotes = () =>{
+			try{
+				var notesString = fs.readFileSync('notes-data.json')
+				return JSON.parse(notesString)
+			}catch(e){
+				return [];
+			}
+		}
+
+		var saveNotes = (notes) => {
+			fs.writeFileSync('notes-data.json', JSON.stringify(notes))		
+		}
+
+	
+	- Removing a Note
+	==================
+		- var deleteNote = (title) => {
+			var notes = fetchNotes()
+			var filteredNotes = notes.filter((note) => note.title !== title)
+			saveNotes(filteredNotes)
+			return notes.length !==  filteredNotes.length	
+		  }
+		  
+	-  Reading Notes and Reusability
+	=================================
+		- var getNote = (title) => {
+			var notes = fetchNotes()
+			var filteredNotes = notes.filter((note) => note.title === title)
+			return filteredNotes[0]
+		}
+		
+		Reusability
+		-----------
+		var logNote = (note) =>{
+			console.log('---')
+			console.log(`Title : ${note.title}`)
+			console.log(`Body : ${note.body}`)
+		}
+			
+		
+	- Debugging Node.js Applications
+	================================
+		- Debug on CLI and on Chrome developer tools
+		- To open debugger in command line
+		- >node inspect debugging.js
+		   commands of debugger 
+		   n - next line
+		   c - containue
+		   repl - to get into execution mode where we can change the variable value and check the value of variable
+		   
+		- we we place debugger; in the code, debugger will stop just at this point, will act as breakpoint
+		- we can use nodemon in combination with debugger 
+		- nodemon inspect appV1.js read --title="to buy"
+		
+		
+	- Debugging via Chrome Dev Tools
+	=================================
+		- node --inspect-brk playground/debugging.js
+		- Open chrome 
+		- chrome://inspect/#devices --> Open dedicated DevTools for Node
+		- or Click on inspect under remote target which will provide gui for debugging the code.
+		
+	- Lisiting Nodes
+	================
+		- var getAll = () => {
+			return fetchNotes()
+		}
+		
+	- Requiring Arguments and Advanced Yargs
+	=========================================
+		- Learn how to configure Yargs for command line applications
+		- Set various properties on arguments like wheather required or not, etc
+		- const titleOptions = {
+			describe: 'Title of note',
+			demand: true,
+			alias: 't'
+		 }
+
+		- const bodyOptions = {
+				describe: 'Body of note',
+				demand: true,
+				alias: 'b'		
+		 }
+		- const argv = yargs.
+			command('add', 'Add a new note',{
+				title: titleOptions,
+				body: bodyOptions
+			})
+			.command('list', 'List all notes')
+			.command('read','Read a note',{
+				title: titleOptions
+			})
+			.command('remove', 'Remove a note',{
+				title: titleOptions
+			})
+			.help()
+			.argv
+	
+		
+	- Arrow Functions
+	=================
+		- When we have single arguments in a arrow function no need of '()'
+		- var square = n => n * n 
+		  console.log("square: ", square(9))
+		  
+		- Arrow function inside object will not bind this keyword.
+		- We will also not get the arguments keyword to the arrow function.
+		- 
+		C:\VJ-Data\Learning\BlockChain\NODE.JS\The Complete Node.js Developer Course (2nd Edition)\Node_Practice\02_NotesNodeApp\playground>node arrow-function.js
+
+		square:  81
+		[Arguments] {
+		'0': {},
+		'1':
+		{ [Function: require]
+			resolve: { [Function: resolve] paths: [Function: paths] },
+			main:
+			Module {
+				id: '.',
+				exports: {},
+				parent: null,
+				filename:
+				'C:\\VJ-Data\\Learning\\BlockChain\\NODE.JS\\The Complete Node.js Developer Course (2nd Edition)\\Node_Practice\\02_NotesNodeApp\\playground\\arrow-function.js',
+				loaded: false,
+				children: [],
+				paths: [Array] },
+			extensions:
+			[Object: null prototype] { '.js': [Function], '.json': [Function], '.node': [Function] },
+			cache:
+			[Object: null prototype] {
+				'C:\\VJ-Data\\Learning\\BlockChain\\NODE.JS\\The Complete Node.js Developer Course (2nd Edition)\\Node_Practice\\02_NotesNodeApp\\playground\\arrow-function.js': [Module] } },
+		'2':
+		Module {
+			id: '.',
+			exports: {},
+			parent: null,
+			filename:
+			'C:\\VJ-Data\\Learning\\BlockChain\\NODE.JS\\The Complete Node.js Developer Course (2nd Edition)\\Node_Practice\\02_NotesNodeApp\\playground\\arrow-function.js',
+			loaded: false,
+			children: [],
+			paths:
+			[ 'C:\\VJ-Data\\Learning\\BlockChain\\NODE.JS\\The Complete Node.js Developer Course (2nd Edition)\\Node_Practice\\02_NotesNodeApp\\playground\\node_modules',
+				'C:\\VJ-Data\\Learning\\BlockChain\\NODE.JS\\The Complete Node.js Developer Course (2nd Edition)\\Node_Practice\\02_NotesNodeApp\\node_modules',
+				'C:\\VJ-Data\\Learning\\BlockChain\\NODE.JS\\The Complete Node.js Developer Course (2nd Edition)\\Node_Practice\\node_modules',
+				'C:\\VJ-Data\\Learning\\BlockChain\\NODE.JS\\The Complete Node.js Developer Course (2nd Edition)\\node_modules',
+				'C:\\VJ-Data\\Learning\\BlockChain\\NODE.JS\\node_modules',
+				'C:\\VJ-Data\\Learning\\BlockChain\\node_modules',
+				'C:\\VJ-Data\\Learning\\node_modules',
+				'C:\\VJ-Data\\node_modules',
+				'C:\\node_modules' ] },
+		'3':
+		'C:\\VJ-Data\\Learning\\BlockChain\\NODE.JS\\The Complete Node.js Developer Course (2nd Edition)\\Node_Practice\\02_NotesNodeApp\\playground\\arrow-function.js',
+		'4':
+		'C:\\VJ-Data\\Learning\\BlockChain\\NODE.JS\\The Complete Node.js Developer Course (2nd Edition)\\Node_Practice\\02_NotesNodeApp\\playground' }
+		
+		Hello. I am undefined in sayHello
+		=========================
+		[Arguments] { '0': 1 }
+		
+		Hello. I am Vijay in sayHiAlt
+		
+3. Asynchronous NodeJS
+======================
+	- Async Basics
+	==============
+		- we will create asynchronous non blocking program, App will continue to run while it waits for something else to happen.
+		- We will built an weather app that will communicate with 3rd part api like google api and weather api, we will use asynchronous method to fetch  data from apis 
+		- In Async function, we will have callback method which will get fired after the wait time.
+		- 	console.log('Starting App')
+			setTimeout(() => {
+				console.log('Inside of callback')
+			}, 2000)
+
+			setTimeout(() => {
+				console.log('Second Timeout')
+			}, 0)
+			
+			console.log('Finishing App')
+			
+			OUTPUT:
+				Starting App
+				Finishing App
+				Second Timeout
+				Inside of callback
+				
+		- Node will execute other things when the thread is waiting for response.
+		- Why Second Timeout executed after Finishing app we will see in the next part
+		
+	- Call Stack  Event Loop(Node Internal Execution of callback and events)
+	========================================================================
+		- Components in the background 
+				- Call Stack
+				- Node APIs
+				- Callback queue
+				- Event Loop
+				
+		- Call Stack is part of V8 
+		- Its a simple data stracture which keeps track of program execution inside V8. Keeps track of functions currently executing and statements that are fired. we can do two things on call stack, one we can add something and second we can remove the top item.
+		- LIFO(Last in first out) 
+		
+		e.g Lets see the execution of simple synchornous flow
+			var x = 1
+			var y = x + 9
+			console.log(`Value of Y ${y}`)
+			
+			- Node first runs the main method which is put into the call stack
+			- var x = 1 is executed which is put into call stack on top of main, once its executed its removed from stack
+			- var y = x + 9 is executed and put into stack on top of main as previous statement is already removed.
+			- console.log(`Value of Y ${y}`) is executed, tracked in the stack.
+			- Once all the statements are executed, main is removed from the stack. At this node process is completed.
+			
+		- Call back functions with in callback queue cannot be executed untill the call stack is empty.
+		- Event loop keep checking for the call stack to be empty, once its empty, callback functions are executed as per queue.
+		- Flow : CALL STACK --> NODE API --> CALLBACK QUEUE --> EVENT LOOP --> CALL STACK
+		- Above all components are internal to Node, we dont intract with it 
+		
+	- Callback Functions  APIs
+	==========================
+		-  Google API, Takes pin and returns lat, long coordinates.
+		-  Callback function
+		   Its a function which is passed as argument to another function and executed after some event happen which is a general defination. Event can be anything like DB query executed, http response recevied, etc.
+		-   
+		To Get Latitude and Longtitude
+		==============================
+		https://samples.openweathermap.org/data/2.5/weather?q=Texas,US&appid=b6907d289e10d714a6e88b30761fae22
+		https://samples.openweathermap.org/data/2.5/weather?zip=94040,us&appid=b6907d289e10d714a6e88b30761fae22
+		
+		REQUEST External MODULE 
+		https://www.npmjs.com/package/request
+		 - Using request module to make external calls 
+		 
+		Example
+		=======
+		const request = require('request')
+
+		request({
+			url: 'https://samples.openweathermap.org/data/2.5/weather?q=Texas,US&appid=b6907d289e10d714a6e88b30761fae22',
+			json: true,
+		}, (error, response, body) => {
+			console.log(body)
+		})
+		
+	Pretty Printing Objects
+	=======================
+		- 	console.log(JSON.stringify(body, undefined, 2))
+
+	Whats Makes up an HTTP Request
+	==============================
+		- const request = require('request')
+
+			request({
+				url: 'https://samples.openweathermap.org/data/2.5/weather?q=Texas,US&appid=b6907d289e10d714a6e88b30761fae22',
+				json: true,
+			}, (error, response, body) => {
+				//console.log(JSON.stringify(body, undefined, 2))
+				console.log('Longtitude: ',body.coord.lon)
+				console.log('Latitude: ',body.coord.lat)
+				console.log('Country: ',body.sys.country)
+			})
+			
+	Encoding User Input
+	===================
+		- > encodeURIComponent('London GB')
+		    'London%20GB'
+		  > decodeURIComponent('London%20GB')
+			'London GB'
+		
+	Callback Errors
+	===============
+		- request({
+			url: `https://samples.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(argv.a)}&appid=b6907d289e10d714a6e88b30761fae22`,
+			json: true,
+			}, (error, response, body) => {
+				//console.log(JSON.stringify(body, undefined, 2))
+				if(error){
+					console.log('Unaable to connect to server')
+				}else if(body.error === '404'){
+					console.log('No data found for the query')
+				}else if(body.cod === 200){
+					console.log('Longtitude: ',body.coord.lon)
+					console.log('Latitude: ',body.coord.lat)
+					console.log('Country: ',body.sys.country)
+					//console.log(JSON.stringify(response, undefined, 2))		
+				}
+			})
+		
+	Abstracting Callbacks
+	=====================
+		- Creating new file with sub folder geocode/geocode.js and export gecodeAddress from it.
+		- Absctracting the functionality for getting lat and lon to different file.
+		
+		
+	Wiring Up Weather Search
+	========================
+		- https://api.darksky.net/forecast/e07a57a52d409fe1c0df6e1e154215f9/51.51,-0.13
+		
+		request({
+		url: `https://api.darksky.net/forecast/e07a57a52d409fe1c0df6e1e154215f9/51.51,-0.13`,
+		json: true,
+		}, (error, response, body) => {
+			if(error){
+			console.log('Unable to connect to server')
+		}else if(response.statusCode === 400){
+			console.log('Unable to fetch weather')
+		}else if(response.statusCode === 200){
+			console.log('Temperature : ',body.currently.temperature)
+		}
+	 })
+	 
+	Chaining Callbacks Together
+	===========================
+		- Chaning the callbacks for weather and gecode 
+		- 
+		
+	Intro to ES6 Promises
+	=====================
+		-  Promises are aviable from ES6
+		-  Aim to solve probelms when we have more asynchronous coding, they make it easy for computations when requesting data from DB or any api call.
+		- A promise is an abstraction for asynchronous programming. It’s an object that proxies for the return value or the exception thrown by a function that has to do some asynchronous processing.
+		- Callbacks are the simplest possible mechanism for asynchronous code in JavaScript. Unfortunately, raw callbacks sacrifice the control flow, exception handling, and function semantics familiar from synchronous code. Promises provide a way to get those things back.
+		- The core component of a promise object is its then method. 
+		- The then method is how we get the return value (known as the fulfillment value) or the exception thrown (known as the rejection reason) from an asynchronous operation. then takes two optional callbacks as arguments, which we’ll call onFulfilled and onRejected:
+			var promise = doSomethingAync()
+			promise.then(onFulfilled, onRejected)
+		- onFulfilled and onRejected are called when the promise is resolved (the asynchronous processing has completed). Only one will ever be triggered since only one resolution is possible.
+
+		
+		var promise = new Promise((resolve, reject) => {
+			//resolve('Hey it worked!')
+			reject('Unable to fufill promise')
+		})  
+
+		promise.then((message) => {
+			console.log('Success : ',message)
+		}, (errorMessage) => {
+			console.log(errorMessage)
+		})
+
+	Advance Promises
+	================
+		const request = require('request')
+
+		var gecodeAddress = (address) =>{
+				return new Promise((resolve, reject) =>{
+					request({
+						url: `https://samples.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(address)}&appid=b6907d289e10d714a6e88b30761fae22`,
+						json: true,
+					}, (error, response, body) => {
+					if(error){
+						reject('Unable to connect to server')
+					}else if(body.error === '404'){
+						reject('No data found for the query')
+					}else if(body.cod === 200){
+						resolve({
+							address: body.sys.country,
+							latitude: body.coord.lat,
+							longtitude: body.coord.lon,
+						})
+					}
+					})
+				})
+		
+		}
+		
+		gecodeAddress('Texas').then((location) =>{
+			console.log(JSON.stringify(location, undefined,2))
+		},(errorMessage) => {
+			console.log(errorMessage)
+		})
+		
+	
+
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+			
+			
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	
+		
+   
+   
+   
