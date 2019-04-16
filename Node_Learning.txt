@@ -632,6 +632,400 @@
 			console.log(errorMessage)
 		})
 		
+	Weather App With Promises
+	=========================
+		- We will library which has promises built-in, we will explore the axios library which is similar to request, instead of callbacks which are used by request, it will use promises.
+		- So we dont have to wrap our promises to implemente the functionality
+		- https://www.npmjs.com/package/axios
+		
+		- npm install axios@0.13.1 --save 
+		
+	Extra Features
+	==============
+		- default location
+		- Extra weather data
+	
+4. Web Servers and Application Deployment
+=========================================
+	- How to make web server
+	- How to integrate version control into node applications and deploy node apps.
+	- We can expose our URL
+	- We are going to use an framework called express, its one of the most popular npm library, which makes easy to create web server or http api. 
+	
+	- Hello Express
+	===============
+		-  Creating Very first node js web server, 
+		-  Providing URL to user to access the data
+		-  we can also setup static web site
+		-  All above will be done using express library 
+		https://expressjs.com/
+		
+		const express = require('express')
+		
+		var app = express() // Creating an App
+		
+		app.get('/',(req, res) => {
+			//res.send('<h1>Hello Express!</h1>')
+			res.send({
+				name : 'Vijay',
+				likes: ['Biking','Cities']
+			})
+		})
+		
+		app.get('/about',(req, res) => {
+			res.send('About Page')
+		})
+
+		app.get('/bad',(req, res) => {
+			res.send({
+				errorMessage : 'Bad Request'
+			})
+		})		
+		
+		app.listen(3000)
+		
+		
+	Creating a Webserver
+	====================
+		-  var app = express() // Creating an App
+
+		   app.use(express.static(__dirname + '/public'))
+		   
+		   app.listen(3000, () =>{
+			 console.log('Server is UP in port 3000')
+		   })
+		   
+	Rendering Templates with Data
+	=============================
+		- Templating Engine : Render HTML in a dynamic way, we can inject username, current date inside template similat to php or ruby, 
+		- we can also create reusable mark up
+		- we need hanlderbars, we will install a module which is wrapper around handlebars which will act as express view engine.
+		- https://handlebarsjs.com/
+		- https://www.npmjs.com/package/hbs
+		- installtion : npm install hbs --save
+		
+		const hbs = require('hbs')
+		
+		res.render('home.hbs',{
+			pageTitle: 'Home Page',
+			welcomeMessage : 'Welcome User!',
+			currentYear : new Date().getFullYear()
+		})	
+		
+	
+	Advanced Templating
+	===================
+		- Common code in all files can be implemented using partials
+		- hbs.registerPartials(__dirname + '/views/partials')
+		- hbs.registerHandler
+		
+		hbs.registerHelper('getCurrentYear', () =>{
+			return new Date().getFullYear() 
+		})
+
+		hbs.registerHelper('scremIt', (text) =>{
+			return text.toUpperCase() 
+		})
+		
+		- nodemon server.js -e js,hbs // to let nodemon know which files to look for changes
+		
+	Express Middleware
+	=================
+		- Adding middleware to existing express module, 
+		- we have used middleware teaching how to read static file
+		- we can make change to request and response objects,
+		- middleware is executed in the order we implement.
+		
+	Adding Version Control(Git)
+	==========================
+		- Install git 
+		- git init / This will make the existing directory 
+		- Go to parent directory containing code.
+	
+		$ git init
+		Initialized empty Git repository in C:/VJ-Data/Learning/BlockChain/NODE.JS/The Complete Node.js Developer Course (2nd Edition)/Node_Practice/04_NodeWebServer/.git/
+		
+		
+		$ ls -a
+		./   .git/          package.json       public/    server.log
+		../  node_modules/  package-lock.json  server.js  views/
+		
+		$ git status
+		On branch master
+		
+		No commits yet
+		
+		Untracked files:
+		(use "git add <file>..." to include in what will be committed)
+		
+				node_modules/
+				package-lock.json
+				package.json
+				public/
+				server.js
+				server.log
+				views/
+		
+		nothing added to commit but untracked files present (use "git add" to track)
+		
+		$ git add package.json
+		warning: LF will be replaced by CRLF in package.json.
+		The file will have its original line endings in your working directory.
+		
+		$ git status
+		On branch master
+		
+		No commits yet
+		
+		Changes to be committed:
+		(use "git rm --cached <file>..." to unstage)
+		
+				new file:   package.json
+		
+		Untracked files:
+		(use "git add <file>..." to include in what will be committed)
+		
+				node_modules/
+				package-lock.json
+				public/
+				server.js
+				server.log
+				views/
+				
+		Once all required files are added to track
+		==========================================
+		$ git status
+		On branch master
+		
+		No commits yet
+		
+		Changes to be committed:
+		(use "git rm --cached <file>..." to unstage)
+		
+				new file:   package.json
+				new file:   public/help.html
+				new file:   server.js
+				new file:   views/about.hbs
+				new file:   views/home.hbs
+				new file:   views/maintenance.hbs
+				new file:   views/partials/footer.hbs
+				new file:   views/partials/header.hbs
+		
+		Untracked files:
+		(use "git add <file>..." to include in what will be committed)
+		
+				node_modules/
+				package-lock.json
+				server.log
+
+		Create a file with name .gitignore in the root folder which will part of git repository and infrom which files or folders needs to be ignored.
+		Once all the files are added we can commit the code.
+		
+		$ git commit -m "Initial Commit"
+		master (root-commit) 2ac9646] Initial Commit
+		10 files changed, 589 insertions(+)
+		create mode 100644 .gitignore
+		create mode 100644 package-lock.json
+		create mode 100644 package.json
+		create mode 100644 public/help.html
+		create mode 100644 server.js
+		create mode 100644 views/about.hbs
+		create mode 100644 views/home.hbs
+		create mode 100644 views/maintenance.hbs
+		create mode 100644 views/partials/footer.hbs
+		create mode 100644 views/partials/header.hbs
+		
+		At this point LOCAL GIT Repository setup is completed.
+		
+		Setting up GitHub and SSH Key
+		==============================
+			- Now we need to put the code into third part cloud which is github where we can keep the repo as public or private
+			- To intract with github server from local sytem we need to configure SSH key 
+			- https://help.github.com/en/categories/authenticating-to-github
+			- https://help.github.com/en/articles/connecting-to-github-with-ssh
+			
+			- Checking for existing key in git bash : ls -al ~/.ssh
+			
+			Creating new SSH key (below email shoud be same as your gihub account)
+			$ ssh-keygen -t rsa -b 4096 -C "avijaykumar40@gmail.com"
+			Generating public/private rsa key pair.
+			Enter file in which to save the key (/c/Users/VijayAvadhunala/.ssh/id_rsa):
+			Created directory '/c/Users/VijayAvadhunala/.ssh'.
+			Enter passphrase (empty for no passphrase):
+			Enter same passphrase again:
+			Your identification has been saved in /c/Users/VijayAvadhunala/.ssh/id_rsa.
+			Your public key has been saved in /c/Users/VijayAvadhunala/.ssh/id_rsa.pub.
+			The key fingerprint is:
+			SHA256:Gf3CwMGCBtrdFIVt8VwHvGGM3lAM1UALJSLZ1NFtez8 avijaykumar40@gmail.com
+			The key's randomart image is:
+			+---[RSA 4096]----+
+			|  .. .+X*o=&O=.  |
+			| o .oo+o=*++Bo+  |
+			|. ... .o+.++.+ . |
+			|         =..o . .|
+			|        S o .  ..|
+			|           .   E.|
+			|                .|
+			|                 |
+			|                 |
+			+----[SHA256]-----+
+			
+			Now we will find two files in .ssh folder
+			
+			$ ls -al ~/.ssh
+			total 36
+			drwxr-xr-x 1 AzureAD+VijayAvadhunala 4096    0 Apr 16 16:00 ./
+			drwxr-xr-x 1 AzureAD+VijayAvadhunala 4096    0 Apr 16 16:00 ../
+			-rw-r--r-- 1 AzureAD+VijayAvadhunala 4096 3243 Apr 16 16:00 id_rsa
+			-rw-r--r-- 1 AzureAD+VijayAvadhunala 4096  749 Apr 16 16:00 id_rsa.pub
+
+			- Start SSH agent and add the key
+			$ eval $(ssh-agent -s)
+			Agent pid 14532
+			
+			Now add the ssh private key to the ssh
+			$ ssh-add ~/.ssh/id_rsa
+			Identity added: /c/Users/VijayAvadhunala/.ssh/id_rsa (/c/Users/VijayAvadhunala/.ssh/id_rsa)
+			
+			Now configure the github account
+			To copy the ssh key to clipboard
+			$ clip < ~/.ssh/id_rsa.pub
+			Add the copied content to the github Profile --> SSH and GPG Keys --> SSH --> Give a name and past the content.
+			
+			Now test the connection
+			$ ssh -T git@github.com
+			The authenticity of host 'github.com (192.30.253.113)' can't be established.
+			RSA key fingerprint is SHA256:nThbg6kXUpJWGl7E1IGOCspRomTxdCARLviKw6E5SY8.
+			Are you sure you want to continue connecting (yes/no)? yes
+			Warning: Permanently added 'github.com,192.30.253.113' (RSA) to the list of known hosts.
+			Hi avijaykumar40! You've successfully authenticated, but GitHub does not provide shell access.
+			
+			Create repository in github using the web or ClI
+			
+			create a new repository on the command line
+			===========================================
+			echo "# node-webserver" >> README.md
+			git init
+			git add README.md
+			git commit -m "first commit"
+			git remote add origin https://github.com/avijaykumar40/node-webserver.git
+			git push -u origin master
+			
+			Now to push the code to repositiry
+			==================================
+			push an existing repository from the command line
+			git remote add origin https://github.com/avijaykumar40/node-webserver.git  (Just to infrom local repo to which online repo we are pushing the code)
+			git push -u origin master
+			
+			$ git remote add origin https://github.com/avijaykumar40/node-webserver.git
+
+			$ git push -u origin master
+			fatal: HttpRequestException encountered.
+			An error occurred while sending the request.
+			Username for 'https://github.com': avijaykumar40@gmail.com
+			Counting objects: 15, done.
+			Delta compression using up to 4 threads.
+			Compressing objects: 100% (13/13), done.
+			Writing objects: 100% (15/15), 6.84 KiB | 636.00 KiB/s, done.
+			Total 15 (delta 1), reused 0 (delta 0)
+			remote: Resolving deltas: 100% (1/1), done.
+			To https://github.com/avijaykumar40/node-webserver.git
+			* [new branch]      master -> master
+			Branch master set up to track remote branch master from origin.
+			
+			
+	Deploying your Application
+	==========================
+		- We will deploy node app to web using Heroku, we will get an url which anybody can go and access over internet.
+		- Heroku is a website/ web app for managing web applicaiton that are hosted in the cloud.  
+		- They provide great features to deploy, update, change apps. Also provide addons to configure logs, errors etc.
+		- Heroku doesnot require any payment to login 
+		
+		https://signup.heroku.com
+		
+		Download the heroku ClI
+		https://devcenter.heroku.com/articles/heroku-cli
+
+		Once installed, Check the status using
+		heroku --version
+		
+		Login to heroku
+		C:\Users\VijayAvadhunala>heroku login
+		heroku: Press any key to open up the browser to login or q to exit:
+		Opening browser to https://cli-auth.heroku.com/auth/browser/67fb36dc-143d-4ba9-8a36-fe08a04a3dad
+		Logging in... done
+		Logged in as avijaykumar40@gmail.com
+		
+		Add the ssh key to heroku
+		
+		C:\Users\VijayAvadhunala>heroku keys:add
+		Found an SSH public key at C:\Users\VijayAvadhunala\.ssh\id_rsa.pub
+		? Would you like to upload it to Heroku? Yes
+		Uploading C:\Users\VijayAvadhunala\.ssh\id_rsa.pub SSH key... done
+
+		Check the keys
+		C:\Users\VijayAvadhunala>heroku keys
+		=== avijaykumar40@gmail.com keys
+		ssh-rsa AAAAB3NzaC...UErbc4OQ== avijaykumar40@gmail.com
+		
+		Check connection to github from heroku
+		C:\Users\VijayAvadhunala>ssh -v git@heroku.com
+		
+		Configure the listern port to dynamic for heroku : const port = process.env.PORT || 3000
+		
+		Change the package.json file to add the start script
+		 "scripts": {
+			"test": "echo \"Error: no test specified\" && exit 1",
+			"start": "node server.js"
+		 },
+		 
+		 Now we can start as : npm start
+		 
+		 
+	 Now heroku create will create a application in the heroku app
+	 $ heroku create
+	 Creating app... done, nameless-fjord-51781
+	 https://nameless-fjord-51781.herokuapp.com/ | https://git.heroku.com/nameless-fjord-51781.git
+
+		
+	- Heroku create needs to be executed from inside the project localtion
+	  It will create a new web app in the heroku web app
+	  It will also add new remote to the git repo
+	  we have origin remote which points to github 
+	  heroku remote will point to heroku git repo
+	  when we push to heroku git repo, it will see that there are changes and it will take changes and deploy to web
+	  
+	  Inside bash set the heroku as remote and then push to heroku git
+	  $ heroku git:remote -a nameless-fjord-51781
+	  set git remote heroku to https://git.heroku.com/nameless-fjord-51781.git
+
+	 
+	  git push heroku 
+	  
+		
+
+
+			
+			
+			
+
+
+
+
+			
+			
+
+		
+
+		
+		
+		
+
+
+
+
+
+
 	
 
 		
